@@ -1,7 +1,7 @@
-# testapp
+# NASA EVENT MANAGEMENT APP
 
-A new Flutter application.
-
+Flutter Mobile Application made for NASA event management
+Uses qr code scanner for event attance and distribution of publications with other functions.
 ## Getting Started
 
 This project is a starting point for a Flutter application.
