@@ -20,7 +20,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   barcode_scan:
-
+  path_provider: 0.4.1
+  simple_permissions:
+  csv:
+ 
 dev_dependencies:
   flutter_test:
     sdk: flutter

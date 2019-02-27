@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:testapp/about.dart';
 import 'package:testapp/events.dart';
 import 'package:testapp/publications.dart';
-
+import 'package:simple_permissions/simple_permissions.dart';
 
 void main() => runApp(MyApp());
 
@@ -11,6 +11,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SimplePermissions.checkPermission(Permission.WriteExternalStorage).then((isThere) {
+      isThere ? print("permission exists") : SimplePermissions.requestPermission(Permission.WriteExternalStorage);
+    });
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
@@ -24,7 +27,7 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.blue ,
+        primarySwatch: Colors.blue,
       ),
       home: MyHomePage(),
     );
@@ -39,29 +42,42 @@ class MyHomePage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MyHomePage> {
-  
-   int _selectedIndex = 1;
-  final _widgetOptions = [
-    Publications(),
-    Events(),
-    About()
-    ];
+  int _selectedIndex = 1;
+  final _widgetOptions = [Publications(), Events(), About()];
 
   @override
   Widget build(BuildContext context) {
-
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
-        statusBarColor: Colors.blue, //or set color with: Color(0xFF0000FF)
-      )); // removes status bar tint
-    
-    
+      statusBarColor: Colors.blue, //or set color with: Color(0xFF0000FF)
+    )); // removes status bar tint
 
     return Scaffold(
       appBar: AppBar(title: Text("NASA Scanner")),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+      body: new Stack(
+        children: <Widget>[
+          new Offstage(
+            offstage: _selectedIndex != 0,
+            child: new TickerMode(
+              enabled: _selectedIndex == 0,
+              child: new MaterialApp(home: new Publications()),
+            ),
+          ),
+          new Offstage(
+            offstage: _selectedIndex != 1,
+            child: new TickerMode(
+              enabled: _selectedIndex == 1,
+              child: new MaterialApp(home: new Events()),
+            ),
+          ),
+          new Offstage(
+            offstage: _selectedIndex != 2,
+            child: new TickerMode(
+              enabled: _selectedIndex == 2,
+              child: new MaterialApp(home: new About()),
+            ),
+          ),
+        ],
       ),
-
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
